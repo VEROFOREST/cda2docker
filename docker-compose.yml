@@ -33,7 +33,7 @@ services:
       - pwa
     environment:
       PWA_UPSTREAM: pwa:3000
-      SERVER_NAME: ${SERVER_NAME:-localhost, caddy:80}
+      SERVER_NAME: ${SERVER_NAME:-cda2-devops-veronique.simplon-roanne.com, caddy:80}
       MERCURE_PUBLISHER_JWT_KEY: ${MERCURE_PUBLISHER_JWT_KEY:-!ChangeMe!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${MERCURE_SUBSCRIBER_JWT_KEY:-!ChangeMe!}
     restart: unless-stopped
@@ -65,6 +65,9 @@ services:
       - db_data:/var/lib/postgresql/data:rw
       # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./api/docker/db/data:/var/lib/postgresql/data:rw
+    ports:
+      - target: 5432
+        published: 5432
 
 volumes:
   php_socket:

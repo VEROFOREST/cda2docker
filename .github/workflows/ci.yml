@@ -11,13 +11,15 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_ENTRYPOINT: https://localhost
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Pull images
-        run: docker-compose pull --ignore-pull-failures || true
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml pull --ignore-pull-failures || true
       - name: Start services
-        run: docker-compose up --build -d
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build -d
       - name: Wait for services
         run: |
           while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
@@ -36,13 +38,17 @@ jobs:
         run: curl -v -o /dev/null http://localhost
       - name: Check HTTPS reachability
         run: curl  -vk -o /dev/null https://localhost
-      - name: Create test database
-        run: |
-          docker-compose exec -T php bin/console -e test doctrine:database:create
-          docker-compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+      - name: Migrate
+        run: docker-compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+      - name: Install PHPUnit
+        run: docker-compose exec -T php composer require -n symfony/test-pack symfony/http-client justinrainbow/json-schema 
+      - name: ls
+        run: docker-compose exec -T php ls -al 
+      - name: pwd
+        run: docker-compose exec -T php pwd
       - name: PHPUnit
-        run: docker-compose exec -T php bin/phpunit
+        run: docker-compose exec -T php vendor/bin/phpunit /srv/api/tests
       - name: Doctrine Schema Validator
-        run: docker-compose exec -T php bin/console doctrine:schema:validate --skip-sync
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T php bin/console doctrine:schema:validate --skip-sync
       - name: Jest
-        run: docker-compose exec -T pwa yarn test --ci --passWithNoTests
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T pwa yarn test --ci --passWithNoTests

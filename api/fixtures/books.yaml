@@ -1,0 +1,5 @@
+App\Entity\Book:
+    book_{1..100}:
+        name: <sentence(4)>
+        author: <name()>
+        datePublished: <dateTime()>
