@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Greeting
 {
     /**
-     * The entity ID
+     * The entity ID.
      *
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -24,7 +24,7 @@ class Greeting
     private ?int $id = null;
 
     /**
-     * A nice person
+     * A nice person.
      *
      * @ORM\Column
      */

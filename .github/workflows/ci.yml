@@ -52,3 +52,11 @@ jobs:
         run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T php bin/console doctrine:schema:validate --skip-sync
       - name: Jest
         run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T pwa yarn test --ci --passWithNoTests
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: master
+          base: main
+          token: ${{ secrets.PAT }}  
+         

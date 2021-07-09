@@ -66,7 +66,6 @@ class Book
     public function getDatePublished(): ?\DateTimeInterface
     {
         return $this->datePublished;
-        
     }
 
     public function setDatePublished(\DateTimeInterface $datePublished): self
@@ -74,6 +73,5 @@ class Book
         $this->datePublished = $datePublished;
 
         return $this;
-
     }
 }
