@@ -12,7 +12,24 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Book
 
+{
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
 
 
