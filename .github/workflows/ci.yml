@@ -59,4 +59,18 @@ jobs:
           branch: master
           base: main
           token: ${{ secrets.PAT }}  
-         
+      - name: deploy website 
+        on: [pull_request]
+          jobs:
+            deploy:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v2
+                - uses: amondnet/vercel-action@v20
+                  with:
+                    vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+                    github-token: ${{ secrets.PAT }} #Optional 
+                    vercel-args: '--prod' #Optional
+                    vercel-org-id:  crc6snnk7YMf7wT6BL9pJtWG  #Required
+                    vercel-project-id: prj_cJn8vgRv07xmDr1Vwl3QA6HuoGsd #Required 
+                    working-directory: ./pwa
